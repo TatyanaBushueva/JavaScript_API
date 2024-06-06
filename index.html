@@ -22,10 +22,33 @@
             width: 100%;
             height: auto;
         }
+
+        .like-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .like-button {
+            font-size: 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 0;
+            margin-right: 8px;
+        }
+
+        .like-count {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
     <div id="photoContainer"></div>
+    <div id="author_div"></div>
+    <div class="like-container">
+        <button class="like-button">👍</button>
+        <span class="like-count">0</span>
+    </div>
 
     <script>
         let page = 1;
@@ -42,10 +65,14 @@
         }
 
         async function loadMorePhotos() {
-            //создание контента
+            //создание контента с одной фото
             const photos = await fetchPhotos();
-            if (photos.length > 0) {
-                photos.forEach(photo => {
+            if  (photos.length > 0) {
+                photos.forEach((photo,index) => {
+                    if (index === 0) {
+                    const Sign = document.createElement('div');
+                    Sign.classList.add('author_div');
+                    author_div.innerHTML =photo.user.id;
                     const photoElement = document.createElement('div');
                     photoElement.classList.add('photo');
                     const img = document.createElement('img');
@@ -53,16 +80,27 @@
                     img.alt = photo.alt_description;
                     photoElement.append(img);
                     photoContainer.append(photoElement);
-                    
+
+                    }
                 
                 }
             );
-                page++;
+               // page++;
                // loadMorePhotos();
             }
         }
 
         loadMorePhotos();
+
+
+        const likeButton = document.querySelector('.like-button');
+        const likeCount = document.querySelector('.like-count');
+
+        likeButton.addEventListener('click', () => {
+            // Получаем текущее значение счетчика лайков и увеличиваем на 1
+            const currentCount = parseInt(likeCount.textContent, 10);
+            likeCount.textContent = currentCount + 1;
+        });
     </script>
 </body>
 </html>
